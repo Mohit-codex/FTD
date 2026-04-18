@@ -1,0 +1,41 @@
+*{
+    padding: 0px;
+    margin: 0px;
+}
+table{
+    background-color: aqua;
+    font-size: 25px;
+    font-family: cursive;
+    font-weight: 100;
+    font-style: italic;
+    line-height: 2;
+    color: blue;
+    /* background-color: cadetblue; */
+    /* border-width: 5px;
+    border-color: black;
+    border-style: solid;
+    
+     */
+     border: solid black 3px;
+border-radius: 5px;
+border-top: solid yellowgreen 5px;
+width: 1000px;
+height: 500px;
+padding: 10px 20px 30px 40px;
+
+margin: 200px 200px 200px 0px;
+
+
+}
+h1{ 
+    text-align: center;
+    text-shadow:1px 1px 1px yellow ;
+    text-decoration:overline underline  dotted black ;
+    /* text-transform: ; */
+    text-transform: capitalize;
+    background-color: aqua;
+    width: 500px;
+    height: 100px;
+    
+
+}
