@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>animation in css</title>
+    <link rel="shortcut icon" href="nonko narua.png" type="image/x-icon">
+    <link name="discription" content="this is the best website for student who wants to learn web  development">
+   <!-- <link rel="stylesheet" href="main.css"> -->
+    <link name="keyword" content="codehelp,github,web development,
+    software development,machine ,networking,aiml,animation and many more things to learn">
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        .container{
+background-color: aqua;
+height: 500px;
+width: 100%;
+
+/* justify-content: right; */
+        }
+        #one{
+background-color: rgb(214, 17, 125);
+height: 100px;
+width:20%;
+border: 2px solid black;
+border-radius: 15px;
+position: relative;
+top: 10px;
+left: 5px;
+animation-name: rightAnimation;
+animation-duration: 7s;
+animation-timing-function: linear;
+/* animation-fill-mode: forwards; */
+animation-delay: 2s;
+animation-iteration-count: infinite;
+/* animation-direction: normal; */
+/* justify-self: center; */
+animation-direction: alternate;
+animation-play-state: running;
+
+
+        }
+        @keyframes rightAnimation{
+     from{
+top:10px;
+left: 0px;
+     }
+     to{
+top:10px;
+left: 600px;
+     }
+        }
+        #two{
+background-color: chartreuse;
+height: 100px;
+width:20%;
+border: 2px solid black;
+border-radius: 15px;
+position: relative;
+/* justify-self: center; */
+top:240px ;
+left: 600px;
+animation-name: leftAnimation;
+animation-duration: 7s;
+animation-timing-function: linear;
+animation-delay: 2s;
+animation-iteration-count: infinite;
+animation-direction: alternate-reverse;
+
+
+        }
+         @keyframes leftAnimation{
+            from{
+                top: 240px;
+                left: 600;
+            }
+            to{
+                top: 240px;
+                left: 0px;
+            }
+          /* 0%   {background-color:red; left:0px; top:0px;}
+  25%  {background-color:yellow; left:400px; top:0px;}
+  50%  {background-color:blue; left:400px; top:400px;}
+  75%  {background-color:green; left:0px; top:400px;}
+  100% {background-color:red; left:0px; top:0px;} */
+    }
+
+        </style>
+        </head>
+        <body>
+            <div class="container">
+                <div id="one"></div>
+                <div id="two"></div>
+            </div>
+        </body>
+        </html>
