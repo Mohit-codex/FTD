@@ -36,7 +36,7 @@ animation-duration: 7s;
 animation-timing-function: linear;
 /* animation-fill-mode: forwards; */
 animation-delay: 2s;
-animation-iteration-count: infinite;
+/* animation-iteration-count: infinite; */
 /* animation-direction: normal; */
 /* justify-self: center; */
 animation-direction: alternate;
@@ -68,7 +68,7 @@ animation-name: leftAnimation;
 animation-duration: 7s;
 animation-timing-function: linear;
 animation-delay: 2s;
-animation-iteration-count: infinite;
+/* animation-iteration-count: infinite; */
 animation-direction: alternate-reverse;
 
 
@@ -88,6 +88,34 @@ animation-direction: alternate-reverse;
   75%  {background-color:green; left:0px; top:400px;}
   100% {background-color:red; left:0px; top:0px;} */
     }
+    #three{
+background-color: rgb(63, 22, 209);
+height: 100px;
+width:100px;
+border: 2px solid black;
+border-radius: 50px;
+position: relative;
+top: 2px;
+left: 300px;
+animation-name: circleAnimation;
+animation-duration: 7s;
+animation-timing-function: linear;
+/* animation-fill-mode: forwards; */
+animation-delay: 2s;
+/* animation-iteration-count: infinite; */
+/* animation-direction: normal; */
+/* justify-self: center; */
+animation-direction:alternate-reverse;
+animation-play-state: running;
+        }
+        
+@keyframes circleAnimation{
+ 0%   {background-color:red; left:300px; top: 2px;}
+  25%  {background-color:yellow; left:500px; top:2px;}
+  50%  {background-color:blue; left:500px; top:50px;}
+  75%  {background-color:green; left:300px; top:50px;}
+  100% {background-color:red; left:300px; top:2px;} 
+}
 
         </style>
         </head>
@@ -95,6 +123,7 @@ animation-direction: alternate-reverse;
             <div class="container">
                 <div id="one"></div>
                 <div id="two"></div>
+                <div id="three"></div>
             </div>
         </body>
         </html>
