@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free for Students</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0a0b0f;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+    --text-primary: #ffffff;
+    --text-muted: rgba(255,255,255,0.5);
+    --accent-blue: #4f8ef7;
+    --star-color: #4f8ef7;
+  }
+
+  body {
+    background: var(--bg);
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .scene {
+    position: relative;
+    width: 560px;
+    height: 320px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: #10121a;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.06);
+    animation: sceneFade 0.6s ease both;
+  }
+
+  @keyframes sceneFade {
+    from { opacity: 0; transform: scale(0.97) translateY(10px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+  }
+
+  .glow-orb {
+    position: absolute;
+    width: 260px;
+    height: 260px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(60,100,220,0.45) 0%, rgba(80,60,180,0.2) 50%, transparent 75%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-40%, -55%);
+    filter: blur(30px);
+    pointer-events: none;
+  }
+
+  /* LEFT: Mind Map */
+  .card-mindmap {
+    position: absolute;
+    left: 14px;
+    top: 18px;
+    width: 148px;
+    background: rgba(20,22,32,0.85);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-mindmap-header {
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .card-mindmap-header span {
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.02em;
+  }
+
+  .mindmap-body {
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .mm-row { display: flex; gap: 5px; align-items: center; }
+  .mm-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.2); flex-shrink: 0; }
+  .mm-line { height: 6px; border-radius: 3px; background: rgba(255,255,255,0.07); }
+
+  /* CENTER */
+  .center-text {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -52%);
+    text-align: center;
+    z-index: 10;
+    white-space: nowrap;
+  }
+
+  .center-text h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: 34px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: #fff;
+    line-height: 1.1;
+    margin-bottom: 18px;
+  }
+
+  .rating-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 8px 14px;
+    backdrop-filter: blur(10px);
+  }
+
+  .rating-score {
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .stars { display: flex; gap: 2px; }
+  .star {
+    width: 12px;
+    height: 12px;
+    background: var(--star-color);
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+  }
+
+  .rating-text {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.4;
+    text-align: left;
+    max-width: 80px;
+  }
+
+  /* CURSOR */
+  .cursor-icon {
+    position: absolute;
+    left: 50%;
+    top: 62%;
+    transform: translate(28px, 0);
+    z-index: 20;
+    animation: cursorFloat 3s ease-in-out infinite;
+  }
+
+  @keyframes cursorFloat {
+    0%, 100% { transform: translate(28px, 0) rotate(0deg); }
+    50% { transform: translate(28px, -6px) rotate(-3deg); }
+  }
+
+  /* RIGHT: Reports */
+  .card-reports {
+    position: absolute;
+    right: 14px;
+    top: 18px;
+    width: 155px;
+    background: rgba(20,22,32,0.85);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+  }
+
+  .card-reports-header {
+    padding: 7px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .card-reports-header-left { display: flex; align-items: center; gap: 6px; }
+  .card-reports-header span { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.75); }
+  .reports-body { padding: 8px 10px; display: flex; flex-direction: column; gap: 6px; }
+
+  .report-item {
+    background: rgba(255,255,255,0.04);
+    border-radius: 6px;
+    padding: 6px 8px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .report-item-header { display: flex; align-items: center; gap: 5px; margin-bottom: 4px; }
+
+  .report-badge {
+    font-size: 8px;
+    font-weight: 700;
+    padding: 2px 5px;
+    border-radius: 3px;
+    background: rgba(241,196,15,0.2);
+    color: #f1c40f;
+    letter-spacing: 0.03em;
+  }
+
+  .report-lines { display: flex; flex-direction: column; gap: 3px; }
+  .rline { height: 5px; border-radius: 2px; background: rgba(255,255,255,0.06); }
+
+  /* BOTTOM LEFT: Video */
+  .card-video {
+    position: absolute;
+    left: 14px;
+    bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(20,22,32,0.85);
+    border: 1px solid var(--card-border);
+    border-radius: 8px;
+    padding: 7px 10px;
+    backdrop-filter: blur(10px);
+  }
+
+  .play-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .card-video span { font-size: 10px; font-weight: 600; color: rgba(255,255,255,0.65); }
+
+  /* BOTTOM CENTER: Waveform */
+  .card-waveform {
+    position: absolute;
+    left: 50%;
+    bottom: 16px;
+    transform: translateX(-50%);
+    background: rgba(20,22,32,0.85);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    gap: 2.5px;
+    backdrop-filter: blur(10px);
+  }
+
+  .wave-bar {
+    width: 3px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.35);
+    animation: waveAnim 1.2s ease-in-out infinite;
+  }
+
+  .wave-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .wave-bar:nth-child(2) { height: 12px; animation-delay: 0.1s; }
+  .wave-bar:nth-child(3) { height: 8px; animation-delay: 0.2s; }
+  .wave-bar:nth-child(4) { height: 14px; animation-delay: 0.3s; }
+  .wave-bar:nth-child(5) { height: 10px; animation-delay: 0.4s; }
+  .wave-bar:nth-child(6) { height: 6px; animation-delay: 0.5s; }
+
+  @keyframes waveAnim {
+    0%, 100% { transform: scaleY(1); opacity: 0.35; }
+    50% { transform: scaleY(1.6); opacity: 0.8; }
+  }
+
+  /* BOTTOM RIGHT: Arrow */
+  .card-arrow {
+    position: absolute;
+    right: 14px;
+    bottom: 16px;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .card-arrow:hover { transform: scale(1.08); background: #fff; }
+</style>
+</head>
+<body>
+
+<div class="scene">
+  <div class="glow-orb"></div>
+
+  <!-- Mind Map Card -->
+  <div class="card-mindmap">
+    <div class="card-mindmap-header">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.7)" stroke-width="2.2">
+        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+      </svg>
+      <span>Mind Map</span>
+    </div>
+    <div class="mindmap-body">
+      <div class="mm-row"><div class="mm-dot"></div><div class="mm-line" style="width:88px;"></div></div>
+      <div class="mm-row" style="padding-left:10px;"><div class="mm-dot" style="background:rgba(79,142,247,0.4)"></div><div class="mm-line" style="width:65px;"></div></div>
+      <div class="mm-row" style="padding-left:10px;"><div class="mm-dot" style="background:rgba(79,142,247,0.4)"></div><div class="mm-line" style="width:72px;"></div></div>
+      <div class="mm-row"><div class="mm-dot"></div><div class="mm-line" style="width:80px;"></div></div>
+      <div class="mm-row" style="padding-left:10px;"><div class="mm-dot" style="background:rgba(79,142,247,0.4)"></div><div class="mm-line" style="width:55px;"></div></div>
+      <div class="mm-row"><div class="mm-dot"></div><div class="mm-line" style="width:75px;"></div></div>
+    </div>
+  </div>
+
+  <!-- Center Text -->
+  <div class="center-text">
+    <h1>Free for students</h1>
+    <div class="rating-pill">
+      <div>
+        <div class="rating-score">4.8 stars</div>
+        <div class="stars">
+          <div class="star"></div><div class="star"></div><div class="star"></div>
+          <div class="star"></div><div class="star"></div>
+        </div>
+      </div>
+      <div class="rating-text">on the Google Play Store and Apple App Store</div>
+    </div>
+  </div>
+
+  <!-- Cursor -->
+  <div class="cursor-icon">
+    <svg width="30" height="35" viewBox="0 0 30 35" fill="none">
+      <path d="M4 2L4 26L10 20L14 30L17 29L13 19H22L4 2Z" fill="#0a0b0f" stroke="white" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+  </div>
+
+  <!-- Reports Card -->
+  <div class="card-reports">
+    <div class="card-reports-header">
+      <div class="card-reports-header-left">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2.5">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+        </svg>
+        <span>Reports</span>
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2.5">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+      </div>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
+      </svg>
+    </div>
+    <div class="reports-body">
+      <div class="report-item">
+        <div class="report-item-header"><div class="report-badge">Honors ENG</div></div>
+        <div class="report-lines">
+          <div class="rline" style="width:100%"></div>
+          <div class="rline" style="width:90%"></div>
+          <div class="rline" style="width:95%"></div>
+          <div class="rline" style="width:70%"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Overview -->
+  <div class="card-video">
+    <div class="play-btn">
+      <svg width="9" height="10" viewBox="0 0 10 12" fill="rgba(255,255,255,0.8)">
+        <polygon points="1,1 9,6 1,11"/>
+      </svg>
+    </div>
+    <span>Video Overview</span>
+  </div>
+
+  <!-- Waveform -->
+  <div class="card-waveform">
+    <div class="wave-bar"></div><div class="wave-bar"></div>
+    <div class="wave-bar"></div><div class="wave-bar"></div>
+    <div class="wave-bar"></div><div class="wave-bar"></div>
+  </div>
+
+  <!-- Arrow Button -->
+  <div class="card-arrow">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0a0b0f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
+    </svg>
+  </div>
+
+</div>
+
+</body>
+</html>
