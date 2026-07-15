@@ -1,0 +1,42 @@
+*{
+    padding:0px;
+    margin:0px;
+    box-sizing: border-box;
+}
+.parent{
+    background-color: #8cb07f;
+    width:100vw;
+    height:500px;
+    display:flex;
+    border: 1px solid black;
+}
+.child1{
+background-color: #e897a9;
+width:100px;
+height:100px;
+margin: auto;
+ border: 0.5px solid black;
+}
+.child2{
+background-color: aqua;
+width:100px;
+height:100px;
+margin: auto;
+ border: 0.5px solid black;
+}
+.child3{
+background-color: azure;
+width:100px;
+height:100px;
+margin: auto;
+ border: 0.5px solid black;
+}
+
+
+.child4{
+    background-color: blanchedalmond;
+    width:100px;
+height:100px;
+margin: auto;
+ border: 0.5px solid black;
+}
