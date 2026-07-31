@@ -374,3 +374,32 @@ class human{
     m10("mohit kumar");
     m10("prakash");
     // fuction are called first class citizen
+    // <1>returning a function
+    function raja(){
+        return function(number){
+return number*number;
+        }
+    }
+    let n1=raja();
+    let n2=n1(10);
+    console.log(n2);
+    // <2>arrays of function
+    let n3=[function(a,b){
+        return a+b;},function(a,b){
+        return a-b;},function(a,b){
+        return a*b;},function(a,b){
+        return a/b;}];
+        let n4=n3[2];
+        let n5=n4(10,20);
+        console.log(n5);
+        // <3> function inside a object we have seen it earlier
+        // <4> function as arguement
+        function n6(a,b){
+       return a+b;
+        }
+        function n7( c,d){
+
+console.log(c);
+console.log("myself:",d);
+        }
+        n7(n6(10,20),"mohit kumar");
