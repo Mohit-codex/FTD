@@ -402,4 +402,39 @@ return number*number;
 console.log(c);
 console.log("myself:",d);
         }
-        n7(n6(10,20),"mohit kumar");
+        n7(n6(10,20),"mohit kumar");        
+// built in function
+// <1> math function
+console.log(Math.sqrt(25));
+console.log(Math.log(25));
+console.log(Math.round(2.5));
+console.log(Math.ceil(2.1));
+console.log(Math.floor(2.9));
+console.log(Math.random());
+console.log(Math.pow(2,5));
+console.log(Math.cos(90));
+let date=new Date();
+console.log(date);
+console.log(date.getDay());
+console.log(date.getMilliseconds());
+console.log(date.getUTCDate());
+console.log(date.setFullYear(2000));
+console.log(date);
+console.log(date.setDate(12));
+console.log(date);
+let curr=new Date('12 june 2005 7:12:34');
+console.log(curr);
+// dynamic nature of object
+let p1={
+    name:"mohit",
+    class:"cse b",
+    department:"b.tech",
+    rollno:252402139
+};
+p1.rollno=252402140; //dynamic coding
+for(let key in p1){
+    console.log(key);
+    console.log(p1[key]);
+}
+// object clonning and object reference are two differen thing
+// <1> spread operator 
