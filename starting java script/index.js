@@ -438,3 +438,107 @@ for(let key in p1){
 }
 // object clonning and object reference are two differen thing
 // <1> spread operator 
+let src={
+    name:"mohit",
+    class:"cse b",
+    department:"b.tech",
+    rollno:252402139
+};
+
+let dest={...src};
+for(let key in dest){
+    console.log(key);
+    console.log(dest[key]);
+}
+
+src.name="premsagar";
+src.class="diploma";
+
+for(let key in src){
+    console.log(key);
+    console.log(src[key]);
+}
+// <2>assign method
+let src1={
+    name:"Harshvardhan sharma",
+    class:"aiml",
+    department:"b.tech",
+    rollno:252402170
+};
+let src2={
+    names:"dev sharma",
+    class:"aiml",
+    departments:"b.tech",
+    rollnos:252402171
+};
+src1.class="computer science";
+console.log(src1);
+let dest1={};
+dest1=Object.assign({},src1,src2);
+console.log(dest1);
+// <3> by regular loop
+let dest2={};
+for(let key in src1){
+    let newkey=key;
+   dest2[newkey] =src1[key];  
+}
+ console.log(dest2);
+//  error handling in js
+// try -catch -finally
+try{
+    console.log(s);
+}
+catch(e){
+    console.log("this variable is not declare");
+    console.log(e);
+}
+finally{
+    console.log("this block will be executed whether there is error or not");
+}
+// try - catch -throw
+// try{
+//     console.log("i am in try block");
+//     console.log(s);
+//     console.log("print after p");
+// }
+// catch(e){
+// throw new Error("bhai pahle declare to kar le");
+
+// }
+// DOM( document object manipulation)
+// accessing html tags by using js
+let r=document.getElementById('fpara');
+console.log(r);
+let r1=document.getElementById('fdiv');
+console.log(r1);
+console.log(document.getElementsByClassName('mk'));
+console.log(document.getElementsByTagName('p'));
+console.log(document.querySelector('#spara'));
+console.log(document.querySelector('#sdiv'));
+console.log(document.querySelector('.mk'));
+console.log(document.querySelectorAll('.mk'));
+console.log(document.querySelector('p'));
+console.log(document.querySelectorAll('p'));
+// console.log($0); this is a special case
+console.log(button.innerHTML);
+console.log(button.outerHTML);
+button.innerHTML='<p>this is new click</p>';
+console.log(button.textContent);
+console.log(button.innerText);
+let element=document.querySelector('#fdiv');
+console.log(element.innerText);
+console.log(element.textContent);
+element.textContent='this a new  paragragh';
+console.log(element.textContent);
+// creation of new element
+let fheading=document.createElement('h2');
+console.log(fheading);
+// adding new line init
+fheading.textContent="i am creating a new h2 heading";
+console.log(fheading);
+let fdiv=document.querySelector('#fdiv');
+// adding new tag(h2) into div
+fdiv.append(fheading);
+// adding at a specific position
+element.insertAdjacentElement('beforebegin',fheading);  
+
