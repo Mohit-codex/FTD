@@ -528,7 +528,7 @@ console.log(button.innerText);
 let element=document.querySelector('#fdiv');
 console.log(element.innerText);
 console.log(element.textContent);
-element.textContent='this a new  paragragh';
+// element.textContent='this a new  paragragh';
 console.log(element.textContent);
 // creation of new element
 let fheading=document.createElement('h2');
@@ -541,4 +541,12 @@ let fdiv=document.querySelector('#fdiv');
 fdiv.append(fheading);
 // adding at a specific position
 element.insertAdjacentElement('beforebegin',fheading);  
+// deleting element 
+let sdiv=document.querySelector('#sdiv');
+let sheading=document.createElement('h3');
+sheading.textContent="i am inside second div";
+sdiv.append(sheading);
+// remoing sheading which was previously created
+sheading.remove();
+
 
