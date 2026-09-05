@@ -1,38 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Website</title>
-  
-  <link rel="stylesheet" href="main.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prompt → Image</title>
+<style>
+  :root{
+    --ink: #1b1a17;
+    --paper: #eae5da;
+    --line: #c9c2b3;
+    --accent: #3b5c4d;
+    --accent-soft: #cddccf;
+    --mono: 'JetBrains Mono', 'Courier New', monospace;
+    --serif: 'Iowan Old Style', 'Georgia', serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background:var(--paper);
+    color:var(--ink);
+    font-family: var(--serif);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:32px;
+  }
+
+  .studio{
+    width:100%;
+    max-width:720px;
+    border:1px solid var(--line);
+    background:#f4f1e9;
+  }
+
+  .studio__head{
+    padding:28px 32px 20px;
+    border-bottom:1px solid var(--line);
+  }
+
+  .studio__head h1{
+    margin:0;
+    font-size:28px;
+    font-weight:500;
+    letter-spacing:-0.01em;
+  }
+
+  .studio__head p{
+    margin:8px 0 0;
+    font-family:var(--mono);
+    font-size:12px;
+    color:#6b6455;
+  }
+
+  form{
+    padding:24px 32px;
+    display:flex;
+    gap:10px;
+    border-bottom:1px solid var(--line);
+  }
+
+  textarea{
+    flex:1;
+    resize:none;
+    height:52px;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    background:#fff;
+    font-family:var(--serif);
+    font-size:15px;
+    color:var(--ink);
+    line-height:1.4;
+  }
+
+  textarea:focus{
+    outline:none;
+    border-color:var(--accent);
+  }
+
+  button{
+    padding:0 22px;
+    border:1px solid var(--ink);
+    background:var(--ink);
+    color:var(--paper);
+    font-family:var(--mono);
+    font-size:13px;
+    cursor:pointer;
+    transition:background .15s ease, color .15s ease;
+  }
+
+  button:hover{ background:var(--accent); border-color:var(--accent); }
+  button:disabled{ opacity:.45; cursor:not-allowed; }
+
+  .canvas{
+    padding:32px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    min-height:420px;
+    background:
+      repeating-linear-gradient(45deg, transparent, transparent 11px, #e2ddce 11px, #e2ddce 12px);
+  }
+
+  .frame{
+    width:100%;
+    max-width:512px;
+    aspect-ratio:1/1;
+    border:1px solid var(--ink);
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    position:relative;
+  }
+
+  .frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .placeholder, .status{
+    font-family:var(--mono);
+    font-size:12px;
+    color:#8a8271;
+    text-align:center;
+    padding:0 24px;
+  }
+
+  .status.error{ color:#8a3b2f; }
+
+  .spinner{
+    width:16px;
+    height:16px;
+    border:2px solid var(--line);
+    border-top-color:var(--accent);
+    border-radius:50%;
+    margin:0 auto 10px;
+    animation:spin .8s linear infinite;
+  }
+
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  .footer{
+    padding:14px 32px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-family:var(--mono);
+    font-size:11px;
+    color:#8a8271;
+  }
+
+  .footer a{
+    color:var(--accent);
+    text-decoration:none;
+  }
+
+  @media (max-width:520px){
+    form{ flex-direction:column; }
+    button{ padding:12px; }
+  }
+</style>
 </head>
 <body>
-  <!-- 1. HEADER: Site branding, navigation, and top actions -->
-  <header class="site-header">
-    <div class="container">
-      <h1 class="logo">BrandName</h1>
-      <nav class="main-nav">
-        <ul>
-          <li><a href="#home">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
 
-  <!-- 2. MAIN: Core unique content of the page (only one per page) -->
-  <main class="site-main">
-    <section class="hero">
-      <h2>Welcome to Our Site</h2>
-      <p>This is where your primary page content lives.</p>
-    </section>
-  </main>
+<div class="studio">
+  <div class="studio__head">
+    <h1>Prompt → Image</h1>
+    <p>type a description, get a picture. no key required.</p>
+  </div>
 
-  <!-- 3. FOOTER: Copyright, legal links, sitemaps, and social icons -->
-  <footer class="site-footer">
-    <div class="container">
-      <p>&copy; 2026 BrandName. All rights reserved.</p>
+  <form id="genForm">
+    <textarea id="prompt" placeholder="a lighthouse at dusk, watercolor" required></textarea>
+    <button id="genBtn" type="submit">Generate</button>
+  </form>
+
+  <div class="canvas">
+    <div class="frame" id="frame">
+      <div class="placeholder" id="placeholder">your image will appear here</div>
     </div>
-  </footer>
+  </div>
+
+  <div class="footer">
+    <span>image API: pollinations.ai</span>
+    <a id="download" href="#" download="generated.jpg" style="display:none;">download ↓</a>
+  </div>
+</div>
+
+<script>
+  const form = document.getElementById('genForm');
+  const promptEl = document.getElementById('prompt');
+  const frame = document.getElementById('frame');
+  const btn = document.getElementById('genBtn');
+  const downloadLink = document.getElementById('download');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const prompt = promptEl.value.trim();
+    if (!prompt) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Working…';
+    downloadLink.style.display = 'none';
+    frame.innerHTML = `
+      <div class="status">
+        <div class="spinner"></div>
+        rendering…
+      </div>`;
+
+    // Pollinations.ai — free, no API key required.
+    // Docs: https://pollinations.ai
+    const seed = Math.floor(Math.random() * 1000000);
+    const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&seed=${seed}&nologo=true`;
+
+    const img = new Image();
+    img.onload = () => {
+      frame.innerHTML = '';
+      frame.appendChild(img);
+      downloadLink.href = url;
+      downloadLink.style.display = 'inline';
+      btn.disabled = false;
+      btn.textContent = 'Generate';
+    };
+    img.onerror = () => {
+      frame.innerHTML = `<div class="status error">couldn't generate that image — try again or rephrase the prompt.</div>`;
+      btn.disabled = false;
+      btn.textContent = 'Generate';
+    };
+    img.src = url;
+  });
+</script>
+
 </body>
 </html>
