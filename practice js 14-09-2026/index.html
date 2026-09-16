@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple ID and Class Example</title>
+    <style>
+        /* CSS styling using classes (starts with a dot) */
+        .content-box {
+            border: 2px solid #333;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .highlight-text {
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        /* CSS styling using a unique ID (starts with a hashtag) */
+        #main-title {
+            text-align: center;
+            color: #ff5733;
+        }
+        #special-paragraph {
+            background-color: #ffffcc;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    
+    <div class="content-box">
+        
+        
+        <h1 id="main-title">Welcome to My Website</h1>
+        
+      
+        <h2 class="highlight-text">Section Introduction</h2>
+        
+     
+        <p class="highlight-text">
+            This is a normal paragraph sharing the same class style as the heading above.
+        </p>
+        
+  
+        <p id="special-paragraph">
+            This paragraph has a unique ID, giving it its own special background and font style.
+        </p>
+
+    </div>
+    <script>
+        console.log("kaise hp app log");
+        let element=document.getElementById('main-title');
+        console.log(element.innerHTML);
+        console.log(element.outerHTML);
+        element.innerHTML='<h1> i yaha par achhha kar raha hu </h1>';
+        console.log(element.innerHTML);
+        console.log(document.querySelector('.content-box').innerHTML);
+        console.log(document.querySelector('.content-box').innerHTML);
+         console.log(document.querySelector('.content-box').outerHTML);
+         console.log(document.querySelector('.content-box').textContent);
+          console.log(document.querySelector('.content-box').innerText);
+    
+    </script>
+    <script src="api.js">
+    </script>
+ <script src="index.js">
+    </script>
+</body>
+</html>
