@@ -1,0 +1,97 @@
+*{
+    margin: 0px;
+    padding: 0px;
+
+box-sizing: border-box;
+}
+.container{
+width:100vw ;
+height:100vh;
+background: #1FA2FF;  
+background: -webkit-linear-gradient(to right, #A6FFCB, #12D8FA, #1FA2FF); 
+background: linear-gradient(to right, #A6FFCB, #12D8FA, #1FA2FF); 
+display: flex;
+justify-content: center;
+align-items: center;
+color: rgb(47, 49, 51);
+overflow: hidden;
+flex-wrap: wrap;
+
+}
+
+.card{
+    border: 2px solid black;
+   
+    min-width: 40%;
+    height: 60%;
+    max-width: 80%;
+    background: #9b51cc7c; 
+background: -webkit-linear-gradient(to right, #fcb045, #c84343, #833ab4); 
+background: linear-gradient(to right, #e19b38, #fd1d1d, #833ab4);
+display: flex;
+flex-direction: column;
+gap: 1.4rem;
+padding: 1.5rem;
+}
+.heading{
+    font-size: 3rem;
+    color: white;
+    font-weight: 500;
+}
+.middlepart{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 40%;
+
+flex-wrap: wrap;
+   
+}
+
+.namefield{
+    padding: 0.7rem;
+    width: 60%;
+}
+button{
+     padding: 0.7rem;
+}
+.name{
+    margin-bottom: 0.4rem;
+    font-size: larger;
+    font-weight: 400;
+}
+
+.common{
+  width: 30%;
+height: 100%;
+color: aliceblue;
+    border: 1px solid black;
+    /* background: #1DA1F2;  
+background: -webkit-linear-gradient(to right, #009ffc, #1DA1F2); 
+background: linear-gradient(to right, #009ffc, #1DA1F2);  */
+
+
+    border-radius: 50%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-wrap: wrap;
+
+}
+.one{
+    background-image: conic-gradient(yellow var(--progress, 25%), red 0%);
+}
+.two{
+    background-image: conic-gradient(yellow var(--progress, 25%), red 0%);
+}
+.three{
+    background-image: conic-gradient(yellow var(--progress, 25%), red 0%);
+}
+.inputandbutton{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
