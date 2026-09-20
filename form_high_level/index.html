@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Form validation demo</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --bg: #EDF1F6;
+    --surface: #FFFFFF;
+    --ink: #152036;
+    --muted: #55627B;
+    --line: #C7D0DE;
+    --accent: #2C55D9;
+    --accent-ink: #FFFFFF;
+    --ok: #17794E;
+    --ok-bg: #E2F3EA;
+    --bad: #B8322B;
+    --bad-bg: #FBE8E6;
+    --warn: #B06F0C;
+    --track: #DDE3ED;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0F1522;
+      --surface: #182033;
+      --ink: #E7ECF6;
+      --muted: #9AA7C0;
+      --line: #35415C;
+      --accent: #6E8DFF;
+      --accent-ink: #0B1220;
+      --ok: #55D19A;
+      --ok-bg: #163A2C;
+      --bad: #FF8F86;
+      --bad-bg: #3F1D1F;
+      --warn: #E8B04A;
+      --track: #2A3450;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0F1522;
+    --surface: #182033;
+    --ink: #E7ECF6;
+    --muted: #9AA7C0;
+    --line: #35415C;
+    --accent: #6E8DFF;
+    --accent-ink: #0B1220;
+    --ok: #55D19A;
+    --ok-bg: #163A2C;
+    --bad: #FF8F86;
+    --bad-bg: #3F1D1F;
+    --warn: #E8B04A;
+    --track: #2A3450;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 400 1rem/1.5 "Figtree", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+
+  .shell {
+    display: grid;
+    grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+    gap: 40px;
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 48px 24px 64px;
+  }
+
+  /* Side panel: progress by field */
+  aside { align-self: start; position: sticky; top: 32px; }
+  h1 {
+    font: 700 2rem/1.1 "Bricolage Grotesque", "Figtree", system-ui, sans-serif;
+    letter-spacing: -0.02em;
+    margin: 0 0 8px;
+  }
+  .lede { color: var(--muted); margin: 0 0 28px; }
+  .count { font-weight: 600; margin: 0 0 8px; }
+  .bar { height: 6px; border-radius: 3px; background: var(--track); overflow: hidden; margin-bottom: 20px; }
+  .bar > span { display: block; height: 100%; width: 0; background: var(--ok); transition: width .25s ease; }
+  .fieldlist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .fieldlist li { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: .95rem; }
+  .fieldlist li::before {
+    content: ""; width: 16px; height: 16px; border-radius: 50%;
+    border: 2px solid var(--line); flex: none;
+  }
+  .fieldlist li[data-done="true"] { color: var(--ink); }
+  .fieldlist li[data-done="true"]::before {
+    border-color: var(--ok); background: var(--ok);
+    box-shadow: inset 0 0 0 3px var(--surface);
+  }
+
+  /* Form card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 32px;
+  }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 20px; }
+  .full { grid-column: 1 / -1; }
+
+  label, .label { display: block; font-weight: 600; font-size: .95rem; margin-bottom: 6px; }
+  .hint { color: var(--muted); font-weight: 400; }
+
+  .wrap { position: relative; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="date"], input[type="password"] {
+    width: 100%;
+    font: inherit;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1.5px solid var(--line);
+    border-radius: 8px;
+    padding: 11px 42px 11px 12px;
+    min-height: 46px;
+    transition: border-color .15s ease, background-color .15s ease;
+  }
+  input::placeholder { color: var(--muted); opacity: .75; }
+  input:focus-visible, button:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 2px;
+  }
+  .field[data-state="valid"] input { border-color: var(--ok); }
+  .field[data-state="invalid"] input { border-color: var(--bad); background: var(--bad-bg); }
+
+  .mark {
+    position: absolute; right: 13px; top: 50%; transform: translateY(-50%);
+    font-weight: 700; pointer-events: none;
+  }
+  .field[data-state="valid"] .mark { color: var(--ok); }
+  .field[data-state="valid"] .mark::before { content: "\2713"; }
+  .field[data-state="invalid"] .mark { color: var(--bad); }
+  .field[data-state="invalid"] .mark::before { content: "!"; }
+
+  .error { color: var(--bad); font-size: .9rem; margin: 6px 0 0; min-height: 0; }
+  .error:empty { display: none; }
+
+  /* Password extras */
+  .toggle {
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    font: 600 .85rem "Figtree", system-ui, sans-serif;
+    color: var(--accent); background: none; border: 0; padding: 8px; border-radius: 6px; cursor: pointer;
+  }
+  .meter { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin-top: 10px; }
+  .meter i { height: 5px; border-radius: 3px; background: var(--track); transition: background-color .2s ease; }
+  .meter[data-level="1"] i:nth-child(-n+1) { background: var(--bad); }
+  .meter[data-level="2"] i:nth-child(-n+2) { background: var(--warn); }
+  .meter[data-level="3"] i:nth-child(-n+3) { background: var(--ok); }
+  .meter[data-level="4"] i:nth-child(-n+4) { background: var(--ok); }
+  .strength { font-size: .85rem; color: var(--muted); margin: 6px 0 0; }
+  .rules { list-style: none; padding: 0; margin: 10px 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 16px; font-size: .9rem; color: var(--muted); }
+  .rules li::before { content: "\25CB"; display: inline-block; width: 1.4em; }
+  .rules li[data-pass="true"] { color: var(--ok); }
+  .rules li[data-pass="true"]::before { content: "\2713"; font-weight: 700; }
+
+  .check { display: flex; gap: 10px; align-items: flex-start; }
+  .check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--accent); flex: none; }
+  .check label { font-weight: 400; margin: 0; }
+  .field[data-state="invalid"] .check input { outline: 2px solid var(--bad); outline-offset: 1px; }
+
+  .summary {
+    border: 1.5px solid var(--bad); background: var(--bad-bg); color: var(--ink);
+    border-radius: 8px; padding: 14px 16px; margin-bottom: 24px;
+  }
+  .summary p { margin: 0 0 6px; font-weight: 600; }
+  .summary ul { margin: 0; padding-left: 20px; }
+  .summary a { color: var(--bad); }
+  [hidden] { display: none !important; }
+
+  .actions { display: flex; gap: 12px; align-items: center; margin-top: 28px; flex-wrap: wrap; }
+  .btn {
+    font: 600 1rem "Figtree", system-ui, sans-serif;
+    border-radius: 8px; padding: 12px 22px; min-height: 46px; cursor: pointer;
+    border: 1.5px solid var(--accent); background: var(--accent); color: var(--accent-ink);
+  }
+  .btn.ghost { background: transparent; color: var(--accent); }
+
+  /* Success */
+  .done h2 { font: 700 1.5rem/1.2 "Bricolage Grotesque", "Figtree", sans-serif; margin: 0 0 8px; }
+  .done p { color: var(--muted); margin: 0 0 20px; }
+  .done dl { display: grid; grid-template-columns: max-content 1fr; gap: 8px 20px; margin: 0 0 8px; }
+  .done dt { color: var(--muted); }
+  .done dd { margin: 0; font-weight: 500; overflow-wrap: anywhere; }
+
+  @media (max-width: 820px) {
+    .shell { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 28px 16px 48px; }
+    aside { position: static; }
+    .fieldlist { display: none; }
+    .card { padding: 22px 18px; }
+  }
+  @media (max-width: 560px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+    .rules { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <h1>Create your account</h1>
+    <p class="lede">Each field is checked as you fill it in. Errors show once you leave a field.</p>
+    <p class="count" id="count" aria-live="polite">0 of 7 fields complete</p>
+    <div class="bar" aria-hidden="true"><span id="barfill"></span></div>
+    <ul class="fieldlist" id="fieldlist" aria-hidden="true"></ul>
+  </aside>
+
+  <main>
+    <div class="card">
+      <form id="signup" novalidate>
+        <div id="summary" class="summary" role="status" tabindex="-1" hidden></div>
+
+        <div class="grid">
+          <div class="field full" data-field="fullName">
+            <label for="fullName">Full name</label>
+            <div class="wrap">
+              <input type="text" id="fullName" name="fullName" autocomplete="name" placeholder="Asha Verma"
+                     aria-describedby="fullName-error">
+              <span class="mark" aria-hidden="true"></span>
+            </div>
+            <p class="error" id="fullName-error"></p>
+          </div>
+
+          <div class="field" data-field="email">
+            <label for="email">Email</label>
+            <div class="wrap">
+              <input type="email" id="email" name="email" autocomplete="email" inputmode="email"
+                     placeholder="asha@example.com" aria-describedby="email-error">
+              <span class="mark" aria-hidden="true"></span>
+            </div>
+            <p class="error" id="email-error"></p>
+          </div>
+
+          <div class="field" data-field="phone">
+            <label for="phone">Phone <span class="hint">(with country code if outside your region)</span></label>
+            <div class="wrap">
+              <input type="tel" id="phone" name="phone" autocomplete="tel" inputmode="tel"
+                     placeholder="+91 98765 43210" aria-describedby="phone-error">
+              <span class="mark" aria-hidden="true"></span>
+            </div>
+            <p class="error" id="phone-error"></p>
+          </div>
+
+          <div class="field full" data-field="dob">
+            <label for="dob">Date of birth</label>
+            <div class="wrap">
+              <input type="date" id="dob" name="dob" autocomplete="bday" aria-describedby="dob-error">
+              <span class="mark" aria-hidden="true"></span>
+            </div>
+            <p class="error" id="dob-error"></p>
+          </div>
+
+          <div class="field full" data-field="password">
+            <label for="password">Password</label>
+            <div class="wrap">
+              <input type="password" id="password" name="password" autocomplete="new-password"
+                     aria-describedby="password-error password-rules">
+              <button type="button" class="toggle" data-target="password" aria-pressed="false" aria-label="Show password">Show</button>
+            </div>
+            <div class="meter" id="meter" data-level="0" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <p class="strength" id="strength" aria-live="polite"></p>
+            <ul class="rules" id="password-rules"></ul>
+            <p class="error" id="password-error"></p>
+          </div>
+
+          <div class="field full" data-field="confirm">
+            <label for="confirm">Confirm password</label>
+            <div class="wrap">
+              <input type="password" id="confirm" name="confirm" autocomplete="new-password"
+                     aria-describedby="confirm-error">
+              <button type="button" class="toggle" data-target="confirm" aria-pressed="false" aria-label="Show confirmation password">Show</button>
+            </div>
+            <p class="error" id="confirm-error"></p>
+          </div>
+
+          <div class="field full" data-field="terms">
+            <div class="check">
+              <input type="checkbox" id="terms" name="terms" aria-describedby="terms-error">
+              <label for="terms">I agree to the terms of service and privacy policy.</label>
+            </div>
+            <p class="error" id="terms-error"></p>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn">Create account</button>
+          <button type="reset" class="btn ghost" id="resetBtn">Clear form</button>
+        </div>
+      </form>
+
+      <section class="done" id="done" hidden aria-live="polite">
+        <h2>Account details are valid</h2>
+        <p>Every field passed. This demo doesn't send anything anywhere: connect the submit handler to your server to finish sign-up.</p>
+        <dl id="result"></dl>
+        <div class="actions"><button type="button" class="btn ghost" id="again">Start over</button></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  const form = document.getElementById("signup");
+  const summary = document.getElementById("summary");
+
+  // ---------- Field definitions ----------
+  const FIELDS = [
+    { name: "fullName", label: "Full name" },
+    { name: "email",    label: "Email" },
+    { name: "phone",    label: "Phone" },
+    { name: "dob",      label: "Date of birth" },
+    { name: "password", label: "Password" },
+    { name: "confirm",  label: "Confirm password" },
+    { name: "terms",    label: "Terms accepted" }
+  ];
+
+  const PASSWORD_RULES = [
+    { id: "len",   text: "8+ characters",       test: v => v.length >= 8 },
+    { id: "upper", text: "Uppercase letter",    test: v => /[A-Z]/.test(v) },
+    { id: "lower", text: "Lowercase letter",    test: v => /[a-z]/.test(v) },
+    { id: "num",   text: "Number",              test: v => /\d/.test(v) },
+    { id: "sym",   text: "Symbol (e.g. ! @ #)", test: v => /[^A-Za-z0-9\s]/.test(v) }
+  ];
+
+  // ---------- Helpers ----------
+  const pad = n => String(n).padStart(2, "0");
+  const now = new Date();
+  const todayISO = now.getFullYear() + "-" + pad(now.getMonth() + 1) + "-" + pad(now.getDate());
+  form.elements.dob.max = todayISO;
+
+  function getValue(name) {
+    const el = form.elements[name];
+    if (el.type === "checkbox") return el.checked;
+    // Passwords are compared exactly; everything else is trimmed.
+    return (name === "password" || name === "confirm") ? el.value : el.value.trim();
+  }
+
+  function ageOn(iso) {
+    const [y, m, d] = iso.split("-").map(Number);
+    let age = now.getFullYear() - y;
+    const beforeBirthday = (now.getMonth() + 1) < m || ((now.getMonth() + 1) === m && now.getDate() < d);
+    return beforeBirthday ? age - 1 : age;
+  }
+
+  // ---------- Validators: return an error message, or "" when valid ----------
+  const validators = {
+    fullName(v) {
+      if (!v) return "Enter your full name.";
+      if (v.length < 2) return "Name must be at least 2 characters.";
+      if (v.length > 80) return "Name must be 80 characters or fewer.";
+      if (!/^[\p{L}][\p{L}\s'.\-]*$/u.test(v)) return "Use letters, spaces, hyphens, or apostrophes only.";
+      return "";
+    },
+
+    email(v) {
+      if (!v) return "Enter your email address.";
+      if (v.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)) return "Enter an email like name@example.com.";
+      return "";
+    },
+
+    phone(v) {
+      if (!v) return "Enter your phone number.";
+      if (!/^\+?[\d\s\-().]+$/.test(v)) return "Use digits only, with an optional leading +.";
+      const digits = v.replace(/\D/g, "");
+      if (digits.length < 10 || digits.length > 15) return "Phone number must have 10 to 15 digits.";
+      return "";
+    },
+
+    dob(v) {
+      if (!v) return "Select your date of birth.";
+      const [y, m, d] = v.split("-").map(Number);
+      const parsed = new Date(y, m - 1, d);
+      if (isNaN(parsed) || parsed.getMonth() !== m - 1) return "Enter a valid date.";
+      if (v > todayISO) return "Date of birth can't be in the future.";
+      const age = ageOn(v);
+      if (age < 18) return "You must be at least 18 to create an account.";
+      if (age > 120) return "Check the year. That date is too far back.";
+      return "";
+    },
+
+    password(v) {
+      if (!v) return "Enter a password.";
+      const missing = PASSWORD_RULES.filter(r => !r.test(v)).map(r => r.text.toLowerCase());
+      if (missing.length) return "Password still needs: " + missing.join(", ") + ".";
+      if (v.length > 128) return "Password must be 128 characters or fewer.";
+      return "";
+    },
+
+    confirm(v) {
+      if (!v) return "Re-enter your password.";
+      if (v !== getValue("password")) return "Passwords don't match.";
+      return "";
+    },
+
+    terms(checked) {
+      return checked ? "" : "Accept the terms to continue.";
+    }
+  };
+
+  // ---------- UI updates ----------
+  const touched = new Set();
+
+  function showResult(name, message) {
+    const field = form.querySelector('[data-field="' + name + '"]');
+    const err = document.getElementById(name + "-error");
+    const input = form.elements[name];
+    err.textContent = message;
+    field.dataset.state = message ? "invalid" : "valid";
+    input.setAttribute("aria-invalid", message ? "true" : "false");
+  }
+
+  function validateField(name) {
+    const message = validators[name](getValue(name));
+    showResult(name, message);
+    return message;
+  }
+
+  function updatePasswordFeedback() {
+    const v = form.elements.password.value;
+    const passed = PASSWORD_RULES.filter(r => r.test(v)).length;
+    document.querySelectorAll("#password-rules li").forEach((li, i) => {
+      li.dataset.pass = PASSWORD_RULES[i].test(v) ? "true" : "false";
+    });
+    const score = v ? passed + (v.length >= 12 ? 1 : 0) : 0;
+    const level = score === 0 ? 0 : score <= 2 ? 1 : score === 3 ? 2 : score === 4 ? 3 : 4;
+    document.getElementById("meter").dataset.level = level;
+    document.getElementById("strength").textContent =
+      level ? "Strength: " + ["", "Weak", "Fair", "Good", "Strong"][level] : "";
+  }
+
+  function updateProgress() {
+    let complete = 0;
+    FIELDS.forEach((f, i) => {
+      const ok = validators[f.name](getValue(f.name)) === "";
+      if (ok) complete++;
+      document.querySelectorAll("#fieldlist li")[i].dataset.done = ok;
+    });
+    document.getElementById("count").textContent = complete + " of " + FIELDS.length + " fields complete";
+    document.getElementById("barfill").style.width = (complete / FIELDS.length * 100) + "%";
+  }
+
+  // ---------- Build dynamic bits ----------
+  const rulesEl = document.getElementById("password-rules");
+  PASSWORD_RULES.forEach(r => {
+    const li = document.createElement("li");
+    li.textContent = r.text;
+    li.dataset.pass = "false";
+    rulesEl.appendChild(li);
+  });
+  const listEl = document.getElementById("fieldlist");
+  FIELDS.forEach(f => {
+    const li = document.createElement("li");
+    li.textContent = f.label;
+    li.dataset.done = "false";
+    listEl.appendChild(li);
+  });
+
+  // ---------- Events ----------
+  form.addEventListener("focusout", e => {
+    const name = e.target.name;
+    if (!name || !validators[name] || e.target.type === "checkbox") return;
+    // Don't flag an untouched, empty field just because focus passed through it.
+    touched.add(name);
+    validateField(name);
+    updateProgress();
+  });
+
+  form.addEventListener("input", e => {
+    const name = e.target.name;
+    if (!name || !validators[name]) return;
+    if (e.target.type === "checkbox") touched.add(name);
+    if (touched.has(name)) validateField(name);
+    if (name === "password") {
+      updatePasswordFeedback();
+      if (touched.has("confirm")) validateField("confirm");
+    }
+    updateProgress();
+  });
+
+  document.querySelectorAll(".toggle").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const input = document.getElementById(btn.dataset.target);
+      const showing = input.type === "text";
+      input.type = showing ? "password" : "text";
+      btn.textContent = showing ? "Show" : "Hide";
+      btn.setAttribute("aria-pressed", String(!showing));
+      btn.setAttribute("aria-label", (showing ? "Show " : "Hide ") + (btn.dataset.target === "confirm" ? "confirmation password" : "password"));
+    });
+  });
+
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const invalid = [];
+    FIELDS.forEach(f => {
+      touched.add(f.name);
+      const msg = validateField(f.name);
+      if (msg) invalid.push({ name: f.name, label: f.label, msg });
+    });
+    updateProgress();
+
+    if (invalid.length) {
+      renderSummary(invalid);
+      form.elements[invalid[0].name].focus();
+      return;
+    }
+    summary.hidden = true;
+    showSuccess();
+  });
+
+  function renderSummary(invalid) {
+    summary.replaceChildren();
+    const p = document.createElement("p");
+    p.textContent = invalid.length === 1 ? "Fix 1 field to continue:" : "Fix " + invalid.length + " fields to continue:";
+    const ul = document.createElement("ul");
+    invalid.forEach(item => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.href = "#" + item.name;
+      a.textContent = item.label;
+      a.addEventListener("click", ev => { ev.preventDefault(); form.elements[item.name].focus(); });
+      li.append(a, " \u2013 " + item.msg);
+      ul.appendChild(li);
+    });
+    summary.append(p, ul);
+    summary.hidden = false;
+  }
+
+  function showSuccess() {
+    const result = document.getElementById("result");
+    result.replaceChildren();
+    [["Name", getValue("fullName")], ["Email", getValue("email")],
+     ["Phone", getValue("phone")], ["Date of birth", getValue("dob")]].forEach(([k, v]) => {
+      const dt = document.createElement("dt"); dt.textContent = k;
+      const dd = document.createElement("dd"); dd.textContent = v;
+      result.append(dt, dd);
+    });
+    form.hidden = true;
+    document.getElementById("done").hidden = false;
+  }
+
+  function resetAll() {
+    touched.clear();
+    summary.hidden = true;
+    FIELDS.forEach(f => {
+      const field = form.querySelector('[data-field="' + f.name + '"]');
+      delete field.dataset.state;
+      document.getElementById(f.name + "-error").textContent = "";
+      form.elements[f.name].removeAttribute("aria-invalid");
+    });
+    updatePasswordFeedback();
+    updateProgress();
+  }
+
+  form.addEventListener("reset", () => {
+    // Runs before the browser clears values, so defer the UI refresh.
+    setTimeout(resetAll, 0);
+  });
+
+  document.getElementById("again").addEventListener("click", () => {
+    form.reset();
+    document.getElementById("done").hidden = true;
+    form.hidden = false;
+    form.elements.fullName.focus();
+  });
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>
