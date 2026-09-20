@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>check even or odd</title>
+    
+    <link name="discription" content="t">
+  <style>
+    *{
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+    }
+    body{
+        background-color: rgba(124, 187, 166, 0.96);
+        width: 100vw;
+        height: 100vh;
+display: flex;
+justify-content: center;
+align-items: center;
+
+    }
+    .container{
+        height: 50%;
+        width: 50%;
+        border: 1px solid black;
+        background-color: burlywood;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        border-radius: 2rem;
+        gap: 3rem;
+    }
+    .input_field{
+        
+       text-align: center;
+       
+    }
+    .para{
+        font-size: x-large;
+        font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-weight: 600;
+    }
+    .main_container{
+        display: flex;
+        gap: 2rem;
+        flex-direction: row;
+    }
+  </style>
+  
+    </head>
+
+    <body>
+        <div class="container">
+            <h1 style="margin-bottom: 2rem; font-size: 4rem; color: rgb(5, 4, 1);">Even or Odd</h1>
+            <div class="main_container">
+<p class="para">Enter a number:</p>
+            <input type="text" class="input_field">
+            </div>
+            <button onclick="callMe()" style="height: 3rem; width: 8rem;background-color: aqua; border: 1px solid black; font-size: 2rem;" >submit</button>
+            <div class="output"></div>
+        </div>
+       
+            <script>
+
+  const output_div = document.querySelector('.output');
+  const input_box = document.querySelector('.input_field');   
+
+  function callMe() {
+    const value = input_box.value;                             
+
+    if (value === "" || !Number.isInteger(Number(value))) {
+      output_div.textContent = "enter a valid number";
+      output_div.style.color = "red";
+      return;
+    }
+
+    if (Number(value) % 2 === 0) {
+      output_div.textContent = "even number";
+    } else {
+      output_div.textContent = "odd number";
+    }
+    
+    output_div.style.cssText="font-size:2rem; color:green; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;"
+  }
+
+
+            </script>
+        </body>
+        </html>
