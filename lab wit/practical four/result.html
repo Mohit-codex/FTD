@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>data of student</title>
+    <style>
+         *{
+        margin: 0px;
+        padding: 0px;
+        box-sizing: border-box;
+    }
+    body{
+background:#0F1522;
+min-height: 100vh;
+        width: 100vw;
+display: flex;
+justify-content: center;
+align-items: center;
+    }
+    .container{
+     min-width: 40vw;
+     background-color: #182033;
+       border-radius: 1rem;
+        border: 1px solid rgba(201, 179, 179, 0.388);
+        display: grid;
+        grid-template-columns: repeat(1,1fr);
+        color: white;
+     gap: 2rem;
+    }
+    p{
+        margin-left: 2rem;
+       font-size: x-large;
+    }
+    a{ text-decoration: none;
+          color: #0F1522;
+    }
+    .btn{margin-bottom: 2rem;
+        height: 2rem;
+        width: 8rem;
+    margin-left: 2.4rem;
+    background: #9ef388;
+  font-size: large;
+    }
+    </style>
+    </head>
+    <body>
+        <div class="container">
+        <p style="margin-top: 2rem;"><strong >user name:</strong><span id="nameOfUser"></span></p>
+        <p><strong>user phone number:</strong><span id="phoneOfUser"></span></p>
+        <p><strong>user gmail id:</strong><span id="gmailOfUser"></span></p>
+        <p><strong>user password:</strong><span id="passwordOfUser"></span></p>
+        <p><strong>user date of birth:</strong><span id="dobOfUser"></span></p>
+        <button class="btn"><a href="/index.html">return back </a></button>
+        </div>
+            <script>
+const nameUser=document.querySelector('#nameOfUser');
+const namePhone=document.querySelector('#phoneOfUser');
+const nameGmail=document.querySelector('#gmailOfUser');
+const namePassword=document.querySelector('#passwordOfUser');
+const nameDob=document.querySelector('#dobOfUser');
+ const saved=sessionStorage.getItem("userData");
+ if(saved){
+const data=JSON.parse(saved);
+nameUser.textContent=data.studentName;
+namePhone.textContent=data.studentPhone;
+nameGmail.textContent=data.studentGmail;
+namePassword.textContent=data.studentPassword;
+nameDob.textContent=data.studentDob;
+}
+else{
+    const a=document.createElement('p');
+    a.textContent="no data available";
+    document.body.appendChild(a);
+    a.setAttribute("class","new_element");
+    a.style.color="white";
+}
+            </script>
+        </body>
+        </html>

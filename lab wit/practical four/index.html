@@ -5,176 +5,177 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>form validation</title>
     <style>
- *{
-        margin: 0px;
+ *{ margin: 0px;
         padding: 0px;
         box-sizing: border-box;
     }
     body{
-        /* background: linear-gradient(135deg, #EDF1F6 0%, #C9D8F5 50%, #E8DDF7 100%);
-background-attachment: fixed; */
 background:#0F1522;
 min-height: 100vh;
         width: 100vw;
-        
 display: flex;
 justify-content: center;
 align-items: center;
-
     }
-    .container{
-     min-width: 40vw;
+    .container{  min-width: 40vw;
      background-color: #182033;
        border-radius: 1rem;
         border: 1px solid rgba(201, 179, 179, 0.388);
         display: grid;
         grid-template-columns: repeat(1,1fr);
-     
      gap: 2rem;
     }
-    .common{
-background-color: #182033;
-/* border: 1px solid rgba(201, 179, 179, 0.388); */
-
-    }
-    .one{
-        display: flex;
+    .common{background-color: #182033; }
+    .one{ display: flex;
         flex-direction: column;
         gap: 0.4rem;
         margin-left: 1rem;
         margin-right: 1rem;
         margin-top: 1rem;
     }
-    .two{
-        display: flex;
+    .two{ display: flex;
         flex-direction: row;
         justify-content: space-between;
         gap: 1rem;
           margin-left: 1rem;
            margin-right: 1rem;
     }
-    .email_section{
-        display: flex;
+    .email_section{ display: flex;
         flex-direction: column;
         gap: 0.4rem;
         
     }
-    .phone_section{
-         display: flex;
+    .phone_section{ display: flex;
         flex-direction: column;
-        gap: 0.4rem;
-       
+        gap: 0.4rem; 
     }
-    .three{
-display: flex;
+ .three{display: flex;
 flex-direction: column;
 gap: 0.4rem;
    margin-left: 1rem;
         margin-right: 1rem;
     }
-    .four{
-display: flex;
+    .four{display: flex;
 flex-direction: column;
 gap: 0.4rem;
    margin-left: 1rem;
         margin-right: 1rem;
     }
-      .five{
-display: flex;
+      .five{display: flex;
 flex-direction: column;
 gap: 0.4rem;
    margin-left: 1rem;
         margin-right: 1rem;
     }
-      .six{
-display: flex;
+      .six{display: flex;
 flex-direction: row;
 text-align: center;
 justify-content: center;
- /* height: 2rem; */
 gap:0.6rem;
 padding: 2rem;
    margin-left: 1rem;
         margin-right: 1rem;
     }
-
-      .seven{
-display: flex;
+      .seven{display: flex;
 flex-direction: row;
 gap:4rem;
    margin-left: 1rem;
         margin-right: 1rem;
        margin-bottom: 1rem;
     }
-
-p{
-   color: white;
+p{ color: white;
    font-size: x-large;
    font-weight: 550;
    font-family: serif;
 }
-input{
-    padding: 1rem;
+input{ padding: 1rem;
  border-radius: 0.8rem;
  border: 1px solid blue;
  font-size: 1.2rem;
 }
-.privacy{
-    font-size: 1.4rem;
-}
-.submit_text{
-    background: #4786c4;
-}
-.clear_text{
-     background: #4786c4;
-}
-
+.privacy{font-size: 1.4rem;}
+.submit_text{ background: #4786c4;}
+.clear_text{ background: #4786c4;}
     </style>
- 
     </head>
     <body>
-        <form action="">
+        <form class="student_form">
         <div class="container">
           <div class="common one">
             <p class="user_para">Full name</p>
-           <input type="text" placeholder="asha verma">
+           <input type="text" placeholder="asha verma" id="student_name">
           </div>
-          <div class="common two">
-            
+           <div class="common two"> 
             <div class="email_section">
                 <p>Email</p>
-                 <input type="email" placeholder="asha@example.com">
+                 <input type="email" placeholder="asha@example.com" id="student_gmail">
             </div>
             <div class="phone_section">
                 <p>Phone</p>
-                <input type="tel" placeholder="+91 7742645910">     
+                <input type="tel" placeholder="+91 7742645910" id="student_phone" >     
             </div>
           </div>
           <div class="common three">
             <p>Date of birth</p>
-            <input type="date">
+            <input type="date" id="student_dob">
           </div>
           <div class="common four">
             <p>Password</p>
-            <input type="password">
+            <input type="password" id="student_password">
           </div>
           <div class="common five">
             <p>Confirm password</p>
-            <input type="password">
+            <input type="password" id="student_confirm_password">
           </div>
           <div class="common six">
             <input style="  cursor: pointer; height:1.7rem;width: 2rem;" type="checkbox" id="label">
             <label class="privacy" style="color: white;" for="label">I agree to the terms of service and privacy policy</label>
           </div>
           <div class="common seven">
-            <input type="submit" class="submit_text" value="Create account"   style="cursor: pointer;"">
+            <input type="submit" class="submit_text" value="Create account"   style="cursor: pointer;">
            <input type="reset" class="clear_text" value="Clear Form" style="  cursor: pointer;">
           </div>
         </div>
         </form>
-
             <script>
+                   const submit_btn=document.querySelector('.submit_text');
+                    const form_detail=document.querySelector('.student_form');
+                     const term_condition=document.querySelector('.privacy');
+                     term_condition.addEventListener("change",(e)=>{
+                        submit_btn.disabled=!term_condition.checked;
+                     });
+                     form_detail.addEventListener("submit",(e)=>{
+                        e.preventDefault();
+                        const studentName=document.querySelector('#student_name').value.trim();
+                        const  studentGmail=document.querySelector('#student_gmail').value.trim();
+                        const studentPhone=document.querySelector('#student_phone').value.trim();
+                        const studentDob=document.querySelector('#student_dob').value;
+                        const  studentPassword=document.querySelector('#student_password').value;
+                         const  studentConfirmPassword=document.querySelector('#student_confirm_password').value;
+                        const clearForm=document.querySelector('.clear_text').value;
 
+                    //    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+
+                    //     if(studentPassword.value !== regex){
+                    //         alert("password should contain-a capital letter,a number,a special character,a number");
+                    //         return;
+                    //     }
+                        if(studentPassword.value !== studentConfirmPassword.value){
+                            alert("check your password");
+                            return;
+                        }
+                        if(studentName.value ===""){
+                            alert("enter your name");
+                            return;
+                        }
+                        if(studentPhone.value <10){
+                            alert("enter correct phone number");
+                            return;
+                        }
+                        sessionStorage.setItem("userData",JSON.stringify({studentName,studentPhone,studentDob,studentGmail,studentPassword}));
+                       window.location.href="./result.html";
+                     });
             </script>
         </body>
         </html>
