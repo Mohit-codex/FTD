@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cat Gallery</title>
+  <style>
+    body { font-family: sans-serif; margin: 20px; background: #f4f4f4; }
+    #gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+    #gallery img { width: 100%; height: 200px; object-fit: cover; border-radius: 6px; }
+    button { margin-top: 16px; padding: 10px 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+ 
+  <h1>Cat Gallery</h1>
+  <div id="gallery"></div>
+  <button id="more">Load more</button>
+ 
+  <script>
+    const gallery = document.getElementById("gallery");
+ 
+    async function loadImages() {
+      try {
+        const res = await fetch("https://api.thecatapi.com/v1/images/search?limit=10");
+        const cats = await res.json();
+ 
+        cats.forEach(cat => {
+          const img = document.createElement("img");
+          img.src = cat.url;
+          img.alt = "Cat photo";
+          gallery.appendChild(img);
+        });
+      } catch (err) {
+        gallery.innerHTML = "<p>Could not load images.</p>";
+      }
+    }
+ 
+    document.getElementById("more").addEventListener("click", loadImages);
+    loadImages();
+  </script>
+ 
+</body>
+</html>
